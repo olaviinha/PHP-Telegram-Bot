@@ -1,7 +1,7 @@
 <?php
 
-  // Create webhook. Replace {my_bot_token} with your bot token, and {url_to_this_PHP_file} with the url of this file
-  // and open the full URL in your browser. Webhook should be set and bot should work.
+  // Once this file is configured and online, create webhook by opening the following URL in browser.
+  // Replace {my_bot_token} and {url_to_this_PHP_file} accordingly.
   // https://api.telegram.org/bot{my_bot_token}/setWebhook?url={url_to_this_PHP_file}
 
   ini_set('default_socket_timeout', 120);
