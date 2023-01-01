@@ -14,6 +14,7 @@
 
   if(array_key_exists('message', $update)){
     $chat_id = $update["message"]["chat"]["id"];
+    $sender = "<unknown sender>";
     if(array_key_exists('username', $update["message"]["from"])) $sender = strip_tags($update["message"]["from"]["username"]);
     if(array_key_exists('text', $update["message"])) $message = strip_tags($update["message"]["text"]);
   }
