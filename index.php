@@ -20,7 +20,7 @@
   }
 
   function reply($answer) {
-    global $chat_id, $chat;
+    global $chat_id, $path;
     file_get_contents($path."/sendmessage?chat_id=".$chat_id."&text=".$answer."&parse_mode=html");
   }
 
