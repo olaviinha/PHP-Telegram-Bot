@@ -6,8 +6,8 @@
 
   ini_set('default_socket_timeout', 120);
   $token = '';          // Telegram bot token
-  $allowed_chats = [];  // Chat IDs (optional)
-  $admins = [];         // Telegram username (optional)
+  $allowed_chats = [];  // Chat IDs where this bot works (optional)
+  $admins = [];         // Telegram usernames (optional)
   
   $path = "https://api.telegram.org/bot".$api_key;
   $update = json_decode(file_get_contents("php://input"), TRUE);
