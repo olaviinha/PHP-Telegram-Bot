@@ -9,7 +9,7 @@
   $allowed_chats = [];  // Chat IDs where this bot works (optional)
   $admins = [];         // Telegram usernames (optional)
   
-  $path = "https://api.telegram.org/bot".$api_key;
+  $path = "https://api.telegram.org/bot".$token;
   $update = json_decode(file_get_contents("php://input"), TRUE);
 
   if(array_key_exists('message', $update)){
