@@ -11,23 +11,23 @@
   
   $path = "https://api.telegram.org/bot".$token;
   $update = json_decode(file_get_contents("php://input"), TRUE);
-
+  $admin_mode = false; $allowed = false;
+  
   if(array_key_exists('message', $update)){
     $chat_id = $update["message"]["chat"]["id"];
     $sender = "<unknown sender>";
     if(array_key_exists('username', $update["message"]["from"])) $sender = strip_tags($update["message"]["from"]["username"]);
     if(array_key_exists('text', $update["message"])) $message = strip_tags($update["message"]["text"]);
+    $admin_mode = count($admins) > 0 && in_array($sender, $admins);
+    $allowed = count($allowed_chats) == 0 || in_array($chatId, $allowed_chats);
   }
 
-  function reply($answer) {
-    global $chat_id, $path;
+  function reply($answer, $chat_id=$chat_id, $path=$path) {
     file_get_contents($path."/sendmessage?chat_id=".$chat_id."&text=".$answer."&parse_mode=html");
   }
 
-  if(count($admins) > 0 && in_array($sender, $admins)) $admin_mode = true;
-
   // Commands that work from admins only.
-  if($admin_mode){
+  if($allowed && $admin_mode){
     if(strpos($message, "/admincommand1") === 0) {
       // Do something
       reply("You successfully executed an admin command, /admincommand1");
@@ -39,7 +39,7 @@
   }
 
   // Commands that work from anybody.
-  if(count($allowed_chats) == 0 || in_array($chatId, $allowed_chats))
+  if($allowed)
     if (strpos($message, "/publiccommand1") === 0) {
       // Do something
       reply("You successfully executed a public command, /publiccommand1");
