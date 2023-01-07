@@ -1,4 +1,4 @@
-# PHP-Telegram-Bot
+# PHP Telegram Bot core
 
 Extremely simple PHP Telegram bot core setup & example
 
