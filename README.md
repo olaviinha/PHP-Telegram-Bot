@@ -1,6 +1,6 @@
 # PHP Telegram Bot core
 
-Extremely simple PHP Telegram bot core setup & example
+Minimalistic PHP Telegram bot core setup & example
 
 1. Create a new bot in Telegram using [@BotFather](https://t.me/BotFather) (Telegram's own official bot for that purpose).
 2. @BotFather will provide you a token. Place token in the PHP file.
