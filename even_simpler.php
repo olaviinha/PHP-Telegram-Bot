@@ -10,6 +10,7 @@
 
   if (strpos($message, "/somecommand") === 0) {
     // Do a thing
+    $answer = "I just did a thing.";
     file_get_contents($path."/sendmessage?chat_id=".$chat_id."&text=".$answer."&parse_mode=html");
   }
 ?>
