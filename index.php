@@ -1,53 +1,110 @@
 <?php
 
-  // Once this file is configured and online, create webhook by opening the following URL in browser.
-  // Replace {my_bot_token} and {url_to_this_PHP_file} accordingly.
-  // https://api.telegram.org/bot{my_bot_token}/setWebhook?url={url_to_this_PHP_file}
-
   ini_set('default_socket_timeout', 120);
-  $token = '';          // Telegram bot token
-  $allowed_chats = [];  // Chat IDs where this bot works (optional)
-  $admins = [];         // Telegram usernames (optional)
-  
-  $path = "https://api.telegram.org/bot".$token;
+  date_default_timezone_set('Europe/Helsinki');
+
+  // Basic settings
+  $token =                  ""; // Your Telegram BOT Token
+  $allowed_chats_file =     "logs/allowed_chats.txt";
+  $admins =                 ["@adminname"]; // Array of usernames allowed to perform admin actions on the bot
+  $botname =                "@botname"; // Username of this bot
+  $allow_everywhere =       false;
+
+  $enable_gpt =             true;
+  $enable_lastseen =        true;
+  $disable_all_logging =    false;
+  $logs_dir =               "logs/";
+
+  $separator =              ";;";
+
+  // ------------------------------------------------------------------------------------------------
+
+  $allowed_chats = file_exists($allowed_chats_file) ? explode("\n", @file_get_contents($allowed_chats_file)) : array();
+  $tg_endpoint = "https://api.telegram.org/bot".$token;
   $update = json_decode(file_get_contents("php://input"), TRUE);
-  $admin_mode = false; $allowed = false;
-  
-  if(array_key_exists('message', $update)){
-    $chat_id = $update["message"]["chat"]["id"];
-    $sender = "<unknown sender>";
-    if(array_key_exists('username', $update["message"]["from"])) $sender = strip_tags($update["message"]["from"]["username"]);
-    if(array_key_exists('text', $update["message"])) $message = strip_tags($update["message"]["text"]);
+  $admin_mode = false; $allowed = false; $sender = null; $username = null; $chat_id = null;
+
+  include_once "sys_global_functions.php";
+  include_once "sys_locale.php";
+
+  if(isset($update) && (array_key_exists('message', $update) || array_key_exists('callback_query', $update))) {
+
+    // Parse information accordingly from sent message (/command or regular message) or sent callback query (button click)
+    $cbq = array_key_exists('callback_query', $update) ? strip_tags($update["callback_query"]["data"]) : null;
+    $cbq_message = $cbq ? $update["callback_query"]["message"] : null;
+    $update_message = array_key_exists('message', $update) ? $update["message"] : null;
+    $check_msg = $cbq ? $cbq_message : $update_message;
+    $chat_id = $check_msg["chat"]["id"];
+    $msg_id = $check_msg["message_id"];
+    $sender = array_key_exists('username', $check_msg["from"]) ? strip_tags($check_msg["from"]["username"]) : "unknown";
+    $username = $sender;
+    $message = array_key_exists('text', $check_msg) ? strip_tags($check_msg["text"]) : null;
+
+    // Check if admin and/or allowed in chat
     $admin_mode = count($admins) > 0 && in_array($sender, $admins);
-    $allowed = count($allowed_chats) == 0 || in_array($chatId, $allowed_chats);
-  }
+    $allowed = $allow_everywhere || in_array($chat_id, $allowed_chats);
 
-  function reply($answer, $chat_id=$chat_id, $path=$path) {
-    file_get_contents($path."/sendmessage?chat_id=".$chat_id."&text=".$answer."&parse_mode=html");
-  }
+    // --------------------------------------------------------------------------------
+    //
+    // Admin commands (allowed anywhere)
+    //
+    // --------------------------------------------------------------------------------
 
-  // Commands that work from admins only.
-  if($allowed && $admin_mode){
-    if(strpos($message, "/admincommand1") === 0) {
-      // Do something
-      reply("You successfully executed an admin command, /admincommand1");
-    }
-    if(strpos($message, "/admincommand2") === 0) {
-      // Do something else
-      reply("You successfully executed an admin command, /admincommand2");
-    }
-  }
+    if($admin_mode){
 
-  // Commands that work from anybody.
-  if($allowed)
-    if (strpos($message, "/publiccommand1") === 0) {
-      // Do something
-      reply("You successfully executed a public command, /publiccommand1");
+      // Test that bot works in the current chat
+      if(cmd_is(["/allowed", "/test", "/chatid"])){
+        $response = "<code>".$chat_id."</code>\n";
+        $response .= $allowed ? $msg['already_allowed'] : $msg['not_allowed'];
+        reply($response);
+      }
+
+      // Send message to a chat (/msg <chat_id> <message>)
+      if(cmd_is("/msg")) { reply(arg("all", 2), arg("first")); reply($msg['message_sent']); }
+
+      // Add/remove chat from allowed chats
+      if(cmd_is(["/add", "/allow", "/enable"]))         include_once "commands/cmd_allow_chat.php";
+      if(cmd_is(["/remove", "/disallow", "/disable"]))  include_once "commands/cmd_disallow_chat.php";
+
     }
-    if (strpos($message, "/publiccommand2") === 0) {
-      // Do something else
-      reply("You successfully executed a public command, /publiccommand2");
+    
+    // --------------------------------------------------------------------------------
+    //
+    // Public commands (where allowed or if sent by admin)
+    //
+    // --------------------------------------------------------------------------------
+
+    if($allowed || $admin_mode){
+
+      // Callbacks
+      if(cbq_is("delete_this_and"))               include 'commands/cbq_delete_msgs.php';
+
+      // Unconditional commands
+      if(cmd_is("/halp"))                         include "commands/cmd_help.php";
+      if(cmd_is(["/8", "/kasi"]))                 include "commands/cmd_eightball.php";
+      if(cmd_is("/audio"))                        send_audio("some.mp3");
+      
+      // GPT
+      if($enable_gpt){
+        include "sys_gpt.php";
+        if(cmd_is(["/c"])) reply(gpt(arg("all")));
+      }
+
+      // Logging based features
+      if(!$disable_all_logging){
+        
+        // Last seen
+        if($enable_last_seen){
+          include "features/lastseen.php";
+          if(cmd_is(["/lastseen", "/seen", "/rippasko"])) include "commands/cmd_lastseen.php";
+        }
+
+      }
+
     }
+
+  } else {
+    error_log('No message or callback query');
   }
 
 ?>
