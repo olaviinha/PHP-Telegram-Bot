@@ -6,9 +6,16 @@
 
 ## Regular bot example
 
-The rest of the files in this repository represent a fully functional, rationally structured (imo easy to understand) bot written in PHP.
+The rest of the files in this repository represent a fully functional, rationally structured (imo easy to understand) bot written in PHP. 
+- All the important settings and commands are listed neatly in `index.php`.
+- Code of each command (when needed) is listed  in, and included from, `commands/` dir.
+- `sys_gpt.php` contains the necessities to utilize with GPT3 or GPT4 (chatGPT).
+- `sys_global_functions.php` contains all the PHP functions.
+- Localization can be found in `sys_locale.php` – it is perhaps not the best way to do localization out there, but it works as long as your bot has one main language.
 
 ## Setup
+
+Whether you use just `minimal_tg_bot_example.php` or the whole repository, you must setup your bot as follows:
 
 1. Create a new bot in Telegram using [@BotFather](https://t.me/BotFather) (Telegram's own official bot for that purpose).
 2. @BotFather will provide you a token. Place token in the PHP file.
