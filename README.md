@@ -10,8 +10,8 @@ The rest of the files in this repository represent a fully functional, rationall
 
 - All the important settings and commands are listed neatly in `index.php`.
 - Code of each command (when needed) is listed  in, and included from, `commands/` dir.
-- `sys_gpt.php` contains the necessities to utilize with GPT3 or GPT4 (chatGPT).
-- `sys_global_functions.php` contains all the PHP functions.
+- `sys_gpt.php` contains the _necessities_ to utilize GPT3 or GPT4 (chatGPT). I think it currently does not contain e.g. remembering past convos – will add that later.
+- `sys_global_functions.php` contains all the necessary PHP functions.
 - Localization can be found in `sys_locale.php` – it is perhaps not the best way to do localization out there, but it works as long as your bot has one main language.
 
 ## Setup
