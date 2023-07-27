@@ -63,7 +63,7 @@ function typing(){
   file_get_contents($tg_endpoint."/sendchataction?chat_id=".$chat_id."&action=typing");
 }
 
-// Interpret word1|word2 as word3 (i.e. fix faulty input to correct input)
+// Interpret word1|word2 as word3 (i.e. fix faulty input to correct input or turn somebody's first name into their username)
 function interpret($haystack, $typoed, $fixed, $fuzzy=true){
   if(!is_array($typoed)) $typoed = strpos($typoed, "|") > -1 ? explode("|", $typoed) : array($typoed);
   foreach($typoed as $input){
