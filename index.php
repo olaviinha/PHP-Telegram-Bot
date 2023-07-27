@@ -12,7 +12,7 @@
 
   $enable_gpt =             true;
   $enable_lastseen =        true;
-  $disable_all_logging =    false;
+  $disable_all_logging =    true;
   $logs_dir =               "logs/";
 
   $separator =              ";;";
