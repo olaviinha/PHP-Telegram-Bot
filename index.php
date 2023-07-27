@@ -6,8 +6,8 @@
   // Basic settings
   $token =                  ""; // Your Telegram BOT Token
   $allowed_chats_file =     "logs/allowed_chats.txt";
-  $admins =                 ["@adminname"]; // Array of usernames allowed to perform admin actions on the bot
-  $botname =                "@botname"; // Username of this bot
+  $admins =                 []; // Array of usernames allowed to perform admin actions on the bot (e.g. ["@olaviinha", "@juhlamokka"])
+  $botname =                ""; // Username of this bot (e.g. @CewlBot)
   $allow_everywhere =       false;
 
   $enable_gpt =             true;
