@@ -87,7 +87,8 @@
       // GPT
       if($enable_gpt){
         include "sys_gpt.php";
-        if(cmd_is(["/c"])) reply(gpt(arg("all")));
+        if(cmd_is(["/c"]))                        reply(gpt(arg("all")));
+        if(cmd_is(["/vitsi"]))                    reply(gpt("Kerro ".arg("all")." vitsi."));
       }
 
       // Logging based features
