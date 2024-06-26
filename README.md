@@ -6,7 +6,7 @@
 
 ## Regular bot example
 
-The rest of the files in this repository represent a fully functional, rationally structured (imo easy to understand) bot written in PHP. Note that this bot uses flat files (in `logs/` dir) instead of a database for all features that require logging or saving data of any kind.
+The rest of the files in this repository represent a fully functional, rationally structured bot written in PHP. Note that this bot uses flat files (in `logs/` dir) instead of a database for all features that require logging or saving data of any kind.
 
 - All the important settings and commands are listed neatly in `index.php`.
 - Code of each command (when needed) is listed  in, and included from, `commands/` dir.
