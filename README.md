@@ -22,7 +22,7 @@ Whether you use just `minimal_tg_bot_example.php` or the whole repository, you m
 2. @BotFather will provide you a token. Place token in the PHP file.
 3. Place PHP file on a public server.
 4. Set write permission to `logs` dir (i.e. `chown -R www-data:www-data logs`) if you want to enable features and commands that require any kind of logging.
-5. In the URL below, replace `{my_bot_token}` with your token, `{url_to_this_PHP_file}` with the URL to the PHP file located on your server (index.php or even_simpler.php from this repo) and just open the full URL in your browser:
+5. In the URL below, replace `{my_bot_token}` with your token, `{url_to_this_PHP_file}` with the URL to the PHP file located on your server (index.php or minimal_tg_bot_example.php from this repo) and just open the full URL in your browser:
 ```
 https://api.telegram.org/bot{my_bot_token}/setWebhook?url={url_to_this_PHP_file}/
 ```
